@@ -1,3 +1,7 @@
+
+
+![Setup](https://github.com/user-attachments/assets/9bdc69ae-bf41-4395-8d5d-e8fb72426043)
+
 AWS Churn Prediction Pipeline: End-to-End ML + Analytics Project
 This project is an attempt to build a real-world style churn prediction system from scratch not just a model, but a full pipeline that covers data storage, processing, model training, evaluation, dashboarding, and live inference deployment on AWS.
 The goal was to understand how machine learning systems behave in production environments, not only in notebooks.
