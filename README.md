@@ -1,3 +1,4 @@
+
 AWS Churn Prediction Pipeline End-to-End ML + Analytics Project
 
 This project was my attempt to build a real-world churn prediction system from scratch not just a model in a notebook, but a full pipeline covering data storage, processing, training, evaluation, dashboarding, and live inference on AWS. My goal was to understand how ML systems behave in production, not just in theory.
@@ -6,11 +7,11 @@ Project Objective
 
 I aimed to predict the probability of a user churning within 14 days by combining:
 
-Behavioral usage metrics
+1.Behavioral usage metrics
 
-Experience / friction signals
+2.Experience / friction signals
 
-Engagement trends over time
+3.Engagement trends over time
 
 I then exposed these predictions through a live Streamlit web app running on an EC2 instance, so it felt like a real product rather than an offline experiment.
 
@@ -39,6 +40,7 @@ Processed Layer (S3): feature engineering, one-hot encoding, train/validation/te
 Models Layer (S3): stored Logistic Regression pipeline, XGBoost model, feature schema, and deployment artifacts
 
 What I Learned from EDA
+![image (10)](https://github.com/user-attachments/assets/69b917ec-8397-48e5-b7c4-06febe17b6cb)
 
 While exploring the data in Power BI, I noticed churn was more tied to declining engagement trends over time than single-day low usage. Users with fewer active days and dropping token counts churned more. Latency and errors mattered, but experienced users sometimes tolerated friction if they still found value. Monthly churn gradually declined, hinting at product adaptation.
 
