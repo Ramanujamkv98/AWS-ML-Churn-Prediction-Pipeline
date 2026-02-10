@@ -1,6 +1,6 @@
-AWS Churn Prediction Pipeline — End-to-End ML + Analytics Project
+AWS Churn Prediction Pipeline End-to-End ML + Analytics Project
 
-This project was my attempt to build a real-world churn prediction system from scratch — not just a model in a notebook, but a full pipeline covering data storage, processing, training, evaluation, dashboarding, and live inference on AWS. My goal was to understand how ML systems behave in production, not just in theory.
+This project was my attempt to build a real-world churn prediction system from scratch not just a model in a notebook, but a full pipeline covering data storage, processing, training, evaluation, dashboarding, and live inference on AWS. My goal was to understand how ML systems behave in production, not just in theory.
 
 Project Objective
 
@@ -50,7 +50,7 @@ Logistic Regression for interpretability and coefficient insights
 
 XGBoost to capture non-linear interactions and slightly improve recall
 
-Accuracy looked high because of class imbalance, but recall was realistically low — a common churn challenge. Using both models gave me complementary perspectives instead of relying on one algorithm.
+Accuracy looked high because of class imbalance, but recall was realistically low a common churn challenge. Using both models gave me complementary perspectives instead of relying on one algorithm.
 
 Deployment
 
