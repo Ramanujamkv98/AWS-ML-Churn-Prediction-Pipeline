@@ -41,6 +41,7 @@ Models Layer (S3): stored Logistic Regression pipeline, XGBoost model, feature s
 
 What I Learned from EDA
 ![image (10)](https://github.com/user-attachments/assets/69b917ec-8397-48e5-b7c4-06febe17b6cb)
+Identified 800+ tokens/session threshold where only 7.8% of users reached this level but churn was 62% lower.
 
 While exploring the data in Power BI, I noticed churn was more tied to declining engagement trends over time than single-day low usage. Users with fewer active days and dropping token counts churned more. Latency and errors mattered, but experienced users sometimes tolerated friction if they still found value. Monthly churn gradually declined, hinting at product adaptation.
 
