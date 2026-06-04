@@ -1,4 +1,9 @@
 
+GitHub notebook preview may occasionally fail.
+
+View the fully rendered notebook here:
+https://nbviewer.org/github/Ramanujamkv98/AWS-ML-Churn-Prediction-Pipeline/blob/main/01_churn_pipeline_setup.ipynb
+
 AWS Churn Prediction Pipeline End-to-End ML + Analytics Project
 
 This project was my attempt to build a real-world churn prediction system from scratch not just a model in a notebook, but a full pipeline covering data storage, processing, training, evaluation, dashboarding, and live inference on AWS. My goal was to understand how ML systems behave in production, not just in theory.
