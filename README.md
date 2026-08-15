@@ -1,5 +1,11 @@
 # AWS Churn Prediction Pipeline + Retention Decisioning
 
+## Live Demo
+
+[**Launch the Churn Risk Predictor →**](https://aws-ml-churn-prediction-pipeline-aspyedhjhxuz4ymgpq8uap.streamlit.app/)
+
+The current interactive demo runs on **Streamlit Community Cloud** and loads its saved model artifacts directly from this GitHub repository. The original pipeline was designed and implemented with AWS S3, Athena, EC2, and IAM; the portfolio deployment was moved to Streamlit and GitHub to avoid ongoing AWS infrastructure costs while keeping the application publicly accessible.
+
 
 ## Project Index
 
@@ -15,7 +21,7 @@ Key components:
 - Athena for SQL validation and leakage checks
 - Logistic Regression and XGBoost for churn modeling
 - Power BI for behavioral EDA
-- EC2 and Streamlit for live inference
+- EC2 for the original AWS deployment and Streamlit Community Cloud for the current live demo
 - IAM roles for secure EC2-S3 access
 
 Main learning: churn prediction is not just about fitting a model. Cloud data flow, permissions, feature schema consistency, and deployment design matter just as much as model metrics.
@@ -52,16 +58,16 @@ I aimed to predict the probability of a user churning within 14 days by combinin
 2. Experience / friction signals
 3. Engagement trends over time
 
-I then exposed these predictions through a live Streamlit web app running on an EC2 instance, so it felt like a real product rather than an offline experiment.
+I originally exposed these predictions through a Streamlit web app running on an EC2 instance. The current public demo runs on Streamlit Community Cloud and loads the saved model artifacts from this GitHub repository, preserving the interactive product experience without ongoing AWS hosting costs.
 
 ## Architecture & Tools I Used
 
 - Amazon S3 — data lake and model artifact storage
 - Athena — quick SQL validation and leakage checks
-- EC2 — compute for deployment and hosting Streamlit
+- EC2 — compute used for the original AWS deployment
 - IAM Roles — secure S3 access without hard-coded keys
 - Power BI — exploratory data analysis dashboards
-- Streamlit — real-time prediction interface
+- Streamlit Community Cloud — current public prediction interface
 
 ## Data Flow & Layers I Built
 
@@ -89,7 +95,7 @@ Accuracy looked high because of class imbalance, but recall was realistically lo
 
 ## Deployment
 
-I deployed a Streamlit UI on an EC2 t3.micro instance with public IP access and IAM-based S3 permissions. Users can enter feature values, choose a model, adjust thresholds, and instantly see churn probability, turning analysis into something interactive.
+The original deployment ran the Streamlit UI on an EC2 t3.micro instance with IAM-based access to model artifacts in S3. The current public endpoint runs on Streamlit Community Cloud and loads the serialized model artifacts from the GitHub repository. This change avoids ongoing AWS hosting costs while preserving the same interactive workflow: users can enter feature values, select a model, adjust the decision threshold, and receive an immediate churn-risk estimate.
 
 ## Roadblocks & Key Learnings
 
