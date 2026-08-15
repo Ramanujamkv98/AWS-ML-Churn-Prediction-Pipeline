@@ -1,67 +1,101 @@
-import os
+from pathlib import Path
 
-import boto3
 import joblib
 import pandas as pd
 
-BUCKET = "my-llm-churn-bucket"
-PREFIX = "models"
 
-# Uses /tmp/model on Streamlit Cloud
-LOCAL_MODEL_DIR = os.getenv("MODEL_DIR", "/tmp/model")
-os.makedirs(LOCAL_MODEL_DIR, exist_ok=True)
-
-s3 = boto3.client("s3")
+# --------------------------------------------------
+# Load model artifacts from the repository
+# --------------------------------------------------
+APP_DIR = Path(__file__).resolve().parent
+MODEL_DIR = APP_DIR / "models"
 
 
-def download_if_missing(filename: str) -> str:
-    local_path = os.path.join(LOCAL_MODEL_DIR, filename)
+def load_artifact(filename: str):
+    artifact_path = MODEL_DIR / filename
 
-    if not os.path.exists(local_path):
-        s3_key = f"{PREFIX}/{filename}"
-        s3.download_file(BUCKET, s3_key, local_path)
+    if not artifact_path.exists():
+        raise FileNotFoundError(
+            f"Missing model artifact: {artifact_path}. "
+            f"Make sure {filename} is uploaded to the models/ folder."
+        )
 
-    return local_path
-
-
-FEATURES = joblib.load(
-    download_if_missing("feature_columns.joblib")
-)
-
-XGB = joblib.load(
-    download_if_missing("churn_xgb.joblib")
-)
-
-LOGREG_PIPE = joblib.load(
-    download_if_missing("churn_logreg_pipeline.joblib")
-)
+    return joblib.load(artifact_path)
 
 
+FEATURES = load_artifact("feature_columns.joblib")
+XGB = load_artifact("churn_xgb.joblib")
+LOGREG_PIPE = load_artifact("churn_logreg_pipeline.joblib")
+
+
+# --------------------------------------------------
+# Prepare one observation for prediction
+# --------------------------------------------------
 def _prep(payload: dict) -> pd.DataFrame:
+    payload = payload.copy()
+
+    # Convert the UI model selection into the same one-hot columns
+    # created by processing.py during model training.
+    selected_model = (
+        str(payload.pop("primary_model_7d", "gpt_3.5"))
+        .strip()
+        .replace("-", "_")
+    )
+
+    payload["primary_model_7d_gpt_4.1"] = int(
+        selected_model == "gpt_4.1"
+    )
+
+    payload["primary_model_7d_gpt_4o"] = int(
+        selected_model == "gpt_4o"
+    )
+
+    # gpt_4o_mini and any unknown model map to "other".
+    payload["primary_model_7d_other"] = int(
+        selected_model not in {
+            "gpt_3.5",
+            "gpt_4.1",
+            "gpt_4o",
+        }
+    )
+
     df = pd.DataFrame([payload])
 
-    for column in FEATURES:
-        if column not in df.columns:
-            df[column] = 0
+    # Add missing features, remove extras and preserve training order.
+    X = df.reindex(
+        columns=FEATURES,
+        fill_value=0,
+    )
 
-    return df[FEATURES]
+    return X
 
 
+# --------------------------------------------------
+# Generate churn prediction
+# --------------------------------------------------
 def predict(
     payload: dict,
     model_choice: str = "xgb",
-    threshold: float = 0.35
+    threshold: float = 0.35,
 ) -> dict:
     X = _prep(payload)
 
-    if model_choice.lower() in ["xgb", "xgboost"]:
-        probability = float(XGB.predict_proba(X)[0, 1])
+    model_name = model_choice.lower().strip()
 
-    elif model_choice.lower() in ["logreg", "logistic"]:
-        probability = float(LOGREG_PIPE.predict_proba(X)[0, 1])
+    if model_name in {"xgb", "xgboost"}:
+        probability = float(
+            XGB.predict_proba(X)[0, 1]
+        )
+
+    elif model_name in {"logreg", "logistic"}:
+        probability = float(
+            LOGREG_PIPE.predict_proba(X)[0, 1]
+        )
 
     else:
-        raise ValueError("model_choice must be 'xgb' or 'logreg'")
+        raise ValueError(
+            "model_choice must be 'xgb' or 'logreg'"
+        )
 
     prediction = int(probability >= threshold)
 
@@ -69,4 +103,5 @@ def predict(
         "churn_probability": round(probability, 4),
         "churn_prediction": prediction,
         "threshold": float(threshold),
+        "model": model_name,
     }
