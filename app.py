@@ -1,5 +1,6 @@
-import os
 import streamlit as st
+
+from inference import predict
 
 # Make sure inference.py can find the saved artifacts
 os.environ["MODEL_DIR"] = "/tmp/model"
