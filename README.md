@@ -6,6 +6,8 @@
 ### Phase 1: End-to-End ML Pipeline
 
 Built an AWS-based churn prediction pipeline for an LLM-style product, covering data storage, SQL validation, feature engineering, model training, dashboarding, and live inference.
+<img width="1600" height="802" alt="image (20)" src="https://github.com/user-attachments/assets/fd7f0ced-69a2-435f-be9c-9323806a7e3c" />
+
 
 Key components:
 
